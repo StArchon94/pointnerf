@@ -394,7 +394,7 @@ class NerfSynth360FtDataset(BaseDataset):
             proj_mat_l[:3, :4] = intrinsic @ w2c[:3, :4]
             proj_mats += [(proj_mat_l, self.near_far)]
 
-        proj_mats, intrinsics = np.stack(proj_mats), np.stack(intrinsics)
+        proj_mats, intrinsics = np.asarray(proj_mats, dtype=object), np.stack(intrinsics)
         world2cams, cam2worlds = np.stack(world2cams), np.stack(cam2worlds)
         return proj_mats, intrinsics, world2cams, cam2worlds
 
@@ -425,7 +425,7 @@ class NerfSynth360FtDataset(BaseDataset):
             image_path = os.path.join(self.data_dir, self.scan, f"{frame['file_path']}.png")
             self.image_paths += [image_path]
             img = Image.open(image_path)
-            img = img.resize(self.img_wh, Image.LANCZOS)
+            img = img.resize(self.img_wh, Image.Resampling.LANCZOS)
             img = self.transform(img)  # (4, h, w)
             self.depths += [(img[-1:, ...] > 0.1).numpy().astype(np.float32)]
             self.alphas += [img[-1:].numpy().astype(np.float32)]

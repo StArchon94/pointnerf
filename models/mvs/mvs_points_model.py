@@ -173,7 +173,7 @@ class MvsPointsModel(nn.Module):
         valid_z = sampled_depth
         valid_x = torch.arange(W, dtype=torch.float32, device=sampled_depth.device) / (W - 1)
         valid_y = torch.arange(H, dtype=torch.float32, device=sampled_depth.device) / (H - 1)
-        valid_y, valid_x = torch.meshgrid(valid_y, valid_x)
+        valid_y, valid_x = torch.meshgrid(valid_y, valid_x, indexing='ij')
         # B,N,H,W
         valid_x = valid_x[None, None, None, ...].expand(B, N, C, -1, -1)
         valid_y = valid_y[None, None, None, ...].expand(B, N, C, -1, -1)

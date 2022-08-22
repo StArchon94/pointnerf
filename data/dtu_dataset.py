@@ -233,7 +233,7 @@ class DtuDataset(BaseDataset):
             world2cams += [extrinsic]
             cam2worlds += [np.linalg.inv(extrinsic)]
 
-        self.proj_mats, self.intrinsics = np.stack(proj_mats), np.stack(intrinsics)
+        self.proj_mats, self.intrinsics = np.asarray(proj_mats, dtype=object), np.stack(intrinsics)
         self.world2cams, self.cam2worlds = np.stack(world2cams), np.stack(cam2worlds)
 
 

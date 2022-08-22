@@ -305,7 +305,7 @@ def homo_warp_nongrid(c2w, w2c, intrinsic, ref_cam_xyz, HD, WD, filter=True, **k
         src_cam_xyz = ref_cam_xyz
     src_grid = ((src_cam_xyz[..., :3] / src_cam_xyz[..., 2:3]) @ intrinsic.transpose(1,2))[...,:2]
 
-    mask = torch.prod(torch.cat([torch.ge(src_grid, torch.zeros([1,1,2], device=src_grid.device)), torch.le(src_grid, torch.tensor([[[WD-1,HD-1]]], device=src_grid.device))],dim=-1), dim=-1, keepdim=True, dtype=torch.int8) > 0
+    mask = torch.prod(torch.cat([torch.ge(src_grid, torch.zeros([1,1,2], device=src_grid.device)), torch.le(src_grid, torch.tensor([[[WD-1,HD-1]]], device=src_grid.device))],dim=-1), dim=-1, keepdim=True) > 0
 
     src_grid = src_grid.to(torch.float32)  # grid xy
     hard_id_xy = torch.ceil(src_grid[:,:,:])
@@ -324,7 +324,7 @@ def homo_warp_fg_mask(c2w, w2c, intrinsic, ref_cam_xyz, HD, WD, **kwargs):
         src_cam_xyz = ref_cam_xyz
     src_grid = ((src_cam_xyz[..., :3] / src_cam_xyz[..., 2:3]) @ intrinsic.transpose(1,2))[...,:2]
 
-    mask = torch.prod(torch.cat([torch.ge(src_grid, torch.zeros([1,1,2], device=src_grid.device)), torch.le(src_grid, torch.tensor([[[WD-1,HD-1]]], device=src_grid.device))],dim=-1), dim=-1, keepdim=True, dtype=torch.int8) > 0
+    mask = torch.prod(torch.cat([torch.ge(src_grid, torch.zeros([1,1,2], device=src_grid.device)), torch.le(src_grid, torch.tensor([[[WD-1,HD-1]]], device=src_grid.device))],dim=-1), dim=-1, keepdim=True) > 0
 
     src_grid = src_grid.to(torch.float32)  # grid xy
     hard_id_xy = torch.ceil(src_grid[:,:,:])[:,mask[0,...,0],:]

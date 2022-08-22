@@ -311,7 +311,7 @@ class LlffFtDataset(BaseDataset):
         print("id_list", self.id_list, image_paths)
         for i in self.all_id_list:
             img = Image.open(image_paths[i]).convert('RGB')
-            img = img.resize(self.img_wh, Image.LANCZOS)
+            img = img.resize(self.img_wh, Image.Resampling.LANCZOS)
             img = self.transform(img)  # (3, h, w)
             imgs.append(img)
         self.imgs = imgs

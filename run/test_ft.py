@@ -23,6 +23,8 @@ import cv2
 from PIL import Image
 from tqdm import tqdm
 import gc
+import warnings
+warnings.simplefilter('error')
 
 def mse2psnr(x): return -10.* torch.log(x)/np.log(10.)
 

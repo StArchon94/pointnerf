@@ -158,7 +158,7 @@ def reproject_with_depth_gpu(depth_ref, intrinsics_ref, extrinsics_ref, depth_sr
     width, height = depth_ref.shape[1], depth_ref.shape[0]
     ## step1. project reference pixels to the source view
     # reference view x, y
-    y_ref, x_ref = torch.meshgrid(torch.arange(0, height, device=depth_ref.device), torch.arange(0, width, device=depth_ref.device))
+    y_ref, x_ref = torch.meshgrid(torch.arange(0, height, device=depth_ref.device), torch.arange(0, width, device=depth_ref.device), indexing='ij')
     x_ref, y_ref = x_ref.reshape([-1]), y_ref.reshape([-1])
     # reference 3D space
 
@@ -203,7 +203,7 @@ def reproject_with_depth_gpu(depth_ref, intrinsics_ref, extrinsics_ref, depth_sr
 def check_geometric_consistency_gpu(depth_ref, intrinsics_ref, extrinsics_ref, depth_src, intrinsics_src, extrinsics_src):
     width, height = depth_ref.shape[1], depth_ref.shape[0]
     y_ref, x_ref = torch.meshgrid(torch.arange(0, height, device=depth_ref.device),
-                                  torch.arange(0, width, device=depth_ref.device))
+                                  torch.arange(0, width, device=depth_ref.device), indexing='ij')
     depth_reprojected, x2d_reprojected, y2d_reprojected, x2d_src, y2d_src, oor_mask = reproject_with_depth_gpu(depth_ref, intrinsics_ref, extrinsics_ref, depth_src, intrinsics_src, extrinsics_src)
     # check |p_reproj-p_1| < 1
     dist = torch.sqrt((x2d_reprojected - x_ref) ** 2 + (y2d_reprojected - y_ref) ** 2)

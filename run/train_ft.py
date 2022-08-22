@@ -26,6 +26,9 @@ from tqdm import tqdm
 # from models.pointnet2.pointnet2_stack import pointnet2_utils as pointnet2_stack_utils
 # from pcdet.ops.pointnet2.pointnet2_stack import pointnet2_utils as pointnet2_stack_utils
 import gc
+import warnings
+warnings.simplefilter('error')
+warnings.simplefilter('ignore', UserWarning)
 
 def mse2psnr(x): return -10.* torch.log(x)/np.log(10.)
 
@@ -817,6 +820,7 @@ def main():
             model.opt.no_loss = 0
             model.opt.is_train = 1
             model.train()
+            model.cleanup()
             exit()
 
     if total_steps == 0 and (len(train_dataset.id_list) > 30 or len(train_dataset.view_id_list)  > 30):

@@ -459,7 +459,7 @@ class DtuFtDataset(BaseDataset):
             world2cams += [extrinsic]
             cam2worlds += [np.linalg.inv(extrinsic)]
 
-        proj_mats, intrinsics = np.stack(proj_mats), np.stack(intrinsics)
+        proj_mats, intrinsics = np.asarray(proj_mats, dtype=object), np.stack(intrinsics)
         world2cams, cam2worlds = np.stack(world2cams), np.stack(cam2worlds)
         return proj_mats, intrinsics, world2cams, cam2worlds
 
@@ -555,7 +555,7 @@ class DtuFtDataset(BaseDataset):
                                           f'Depths_raw/{self.scan}/depth_map_{idx:04d}.pfm')
             self.image_paths += [image_path]
             img = Image.open(image_path)
-            img = img.resize(self.img_wh, Image.LANCZOS)
+            img = img.resize(self.img_wh, Image.Resampling.LANCZOS)
             img = self.transform(img)  # (3, h, w)
             self.imgs += [img]
             self.all_rgbs += [img.reshape(3, -1).permute(1, 0)]  # (h*w, 3) RGBA

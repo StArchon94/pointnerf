@@ -363,7 +363,7 @@ class ScannetFtDataset(BaseDataset):
             proj_mat_l[:3, :4] = intrinsic @ w2c[:3, :4]
             proj_mats += [(proj_mat_l, self.near_far)]
 
-        proj_mats, intrinsics = np.stack(proj_mats), np.stack(intrinsics)
+        proj_mats, intrinsics = np.asarray(proj_mats, dtype=object), np.stack(intrinsics)
         world2cams, cam2worlds = np.stack(world2cams), np.stack(cam2worlds)
         return proj_mats, intrinsics, world2cams, cam2worlds
 
@@ -550,7 +550,7 @@ class ScannetFtDataset(BaseDataset):
         image_path = os.path.join(self.data_dir, self.scan, "exported/color/{}.jpg".format(vid))
         # print("vid",vid)
         img = Image.open(image_path)
-        img = img.resize(self.img_wh, Image.LANCZOS)
+        img = img.resize(self.img_wh, Image.Resampling.LANCZOS)
         img = self.transform(img)  # (4, h, w)
         c2w = np.loadtxt(os.path.join(self.data_dir, self.scan, "exported/pose", "{}.txt".format(vid))).astype(np.float32)
         # w2c = np.linalg.inv(c2w)
